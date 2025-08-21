@@ -1,0 +1,87 @@
+/* Сброс */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Neue', cursive;
+    background: url('/static/furry_bg.png') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: url("https://cur.cursors-4u.net/cursors/cur-2/cur116.cur"), auto;
+    color: #fff;
+    text-shadow: 0 0 5px #B3000A;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    background: rgb(255 255 255 / 70%);
+    border-radius: 69px;
+    padding: 40px 50px;
+    box-shadow: 0 8px 69px rgba(0,0,0,0.25);
+    max-width: 900px;
+}
+
+.avatar {
+    width: 389px;
+    height: 529px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 2px solid #7a1e7a;
+    margin-right: 25px;
+}
+
+.content {
+    flex: 1;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #555;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.links a {
+    display: inline-block;
+    margin: 5px 10px;
+    padding: 12px 25px;
+    border-radius: 15px;
+    background: linear-gradient(135deg,#d325d3,#FF1A27);
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.links a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ff99ff;
+}
+
+.skills {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.skills ul {
+    list-style: none;
+}
+
+.skills li {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.highlight {
+    color: #ff4dbd;
+}
