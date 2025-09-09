@@ -5,14 +5,16 @@
     box-sizing: border-box;
 }
 
+
 body {
     font-family: 'Comic Neue', cursive;
     background: url('/static/furry_bg.png') no-repeat center center fixed;
     background-size: cover;
-    height: 100vh;
+    min-height: 100vh; /* вместо height */
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px; /* чтобы не прилипало к краям */
     cursor: url('/static/knot32x32.cur'), auto;
     color: #fff;
     text-shadow: 0 0 5px #B3000A;
@@ -22,66 +24,92 @@ body {
     display: flex;
     align-items: center;
     background: rgb(255 255 255 / 70%);
-    border-radius: 69px;
-    padding: 40px 50px;
-    box-shadow: 0 8px 69px rgba(0,0,0,0.25);
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
     max-width: 900px;
+    width: 100%;
+    flex-wrap: wrap; /* чтобы ломалось в столбик на мобилках */
 }
 
 .avatar {
-    width: 389px;
-    height: 529px;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
     object-fit: cover;
     border-radius: 15px;
     border: 2px solid #7a1e7a;
     margin-right: 25px;
+    margin-bottom: 20px;
 }
 
 .content {
     flex: 1;
+    min-width: 250px;
 }
 
+/* mobile-friendly заголовки */
 h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 10px;
 }
 
 .subtitle {
-    color: #555;
-    font-size: 1.2rem;
-    margin-bottom: 25px;
+    color: #222;
+    font-size: 1rem;
+    margin-bottom: 20px;
 }
 
 .links a {
     display: inline-block;
-    margin: 5px 10px;
-    padding: 12px 25px;
-    border-radius: 15px;
+    margin: 5px 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
     background: linear-gradient(135deg,#d325d3,#FF1A27);
     color: #fff;
     text-decoration: none;
     font-weight: bold;
     transition: 0.3s;
+    font-size: 0.9rem;
 }
 .links a:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 15px #ff99ff;
+    box-shadow: 0 0 10px #ff99ff;
 }
 
-.skills {
-    margin-top: 20px;
-    text-align: left;
-}
-
-.skills ul {
-    list-style: none;
-}
-
-.skills li {
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-}
-
-.highlight {
-    color: #ff4dbd;
+/* адаптив */
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border-radius: 20px;
+    }
+    .avatar {
+        max-width: 200px;
+        margin-right: 0;
+    }
+    h1 {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 0.95rem;
+    }
+    .links {
+        text-align: center;
+    }
+    .links a {
+        display: block;
+        margin: 8px 0;
+        width: 100%;
+        max-width: 250px;
+    }
+    .skills {
+        text-align: center;
+    }
+    .skills ul {
+        padding-left: 0;
+    }
 }
