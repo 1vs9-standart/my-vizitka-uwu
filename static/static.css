@@ -102,9 +102,9 @@ h1 {
     }
     .links a {
         display: block;
-        margin: 8px 0;
+        margin: 7px 0;
         width: 100%;
-        max-width: 250px;
+        max-width: 450px;
     }
     .skills {
         text-align: center;
