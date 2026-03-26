@@ -1,115 +1,419 @@
-/* Сброс */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ── Reset ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ── Variables ── */
+:root {
+    --accent: #d325d3;
+    --accent2: #FF1A27;
+    --glass-bg: rgba(18, 5, 26, .55);
+    --glass-border: rgba(255, 255, 255, .12);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, .45);
+    --card-radius: 24px;
+    --text: #f0e6f6;
+    --text-dim: rgba(240, 230, 246, .6);
+    --link-gradient: linear-gradient(135deg, #d325d3, #FF1A27);
+    --font: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
 }
 
-
+/* ── Body ── */
 body {
-    font-family: 'Comic Neue', cursive;
+    font-family: var(--font);
     background: url('/static/furry_bg.png') no-repeat center center fixed;
     background-size: cover;
-    min-height: 100vh; /* вместо height */
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 20px; /* чтобы не прилипало к краям */
-    cursor: url('/static/knot32x32.cur'), auto;
-    color: #fff;
-    text-shadow: 0 0 5px #B3000A;
+    justify-content: safe center;
+    padding: 180px 20px 20px;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
 }
 
+/*
+ * Кастомный «курсор»: во встроенных WebView/VRChat cursor:url() часто не работает.
+ * Обход: cursor:none + <img> за pointermove (как в CSS-Tricks / общая практика для CEF).
+ * Дополнительно оставлен url() — на обычном десктопе часть движков всё ещё может его подхватить до скрытия.
+ */
+html:not(.no-custom-cursor),
+html:not(.no-custom-cursor) body,
+html:not(.no-custom-cursor) * {
+    cursor: none !important;
+}
+
+.custom-cursor-follower {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    z-index: 2147483647;
+    transform: translate(-4px, -4px);
+    opacity: 0;
+    will-change: left, top;
+}
+html:not(.no-custom-cursor) .custom-cursor-follower.is-active {
+    opacity: 1;
+}
+html.no-custom-cursor .custom-cursor-follower {
+    display: none !important;
+}
+
+/* Обычный курсор: сначала всем, потом pointer на кликабельное (порядок важен) */
+html.no-custom-cursor,
+html.no-custom-cursor body,
+html.no-custom-cursor * {
+    cursor: auto !important;
+}
+html.no-custom-cursor a,
+html.no-custom-cursor button,
+html.no-custom-cursor .project {
+    cursor: pointer !important;
+}
+
+/* ── Single centered column (cards + footer) ── */
+.layout {
+    width: min(100%, 920px);
+    max-width: 920px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    flex-shrink: 0;
+}
+
+/* ── Page wrapper ── */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    width: 100%;
+}
+
+/* ── Glass card ── */
 .card {
-    display: flex;
-    align-items: center;
-    background: rgb(255 255 255 / 70%);
-    border-radius: 69px;
-    padding: 40px 50px;
-    box-shadow: 0 8px 69px rgba(0,0,0,0.25);
-    max-width: 900px;
-    width: 100%;
-    flex-wrap: wrap; /* чтобы ломалось в столбик на мобилках */
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--card-radius);
+    padding: 36px 40px;
+    box-shadow: var(--glass-shadow);
+    animation: fadeUp .6s ease-out both;
+}
+.card--tools { animation-delay: .15s; }
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-.avatar {
+/* ═══ BLOCK 1: ABOUT ═══ */
+.card--about {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.card__avatar-wrap { flex-shrink: 0; }
+
+.card__avatar {
     width: 100%;
-    max-width: 300px;
+    max-width: 260px;
     height: auto;
     object-fit: cover;
-    border-radius: 15px;
-    border: 2px solid #7a1e7a;
-    margin-right: 25px;
-    margin-bottom: 20px;
+    border-radius: 16px;
+    border: 2px solid rgba(211, 37, 211, .5);
+    transition: transform .35s, box-shadow .35s;
+}
+.card__avatar:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 28px rgba(211, 37, 211, .35);
 }
 
-.content {
-    flex: 1;
-    min-width: 250px;
-}
+.card__body { flex: 1; min-width: 260px; }
 
-/* mobile-friendly заголовки */
-h1 {
+.card__name {
     font-size: 2rem;
-    margin-bottom: 10px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 6px;
+}
+.highlight {
+    background: var(--link-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.subtitle {
-    color: #222;
+.card__subtitle {
     font-size: 1rem;
-    margin-bottom: 20px;
+    color: var(--text-dim);
+    margin-bottom: 22px;
 }
 
-.links a {
-    display: inline-block;
-    margin: 5px 8px;
-    padding: 10px 20px;
-    border-radius: 12px;
-    background: linear-gradient(135deg,#d325d3,#FF1A27);
+/* ── Links row ── */
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: .85rem;
+    font-weight: 600;
     color: #fff;
     text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-    font-size: 0.9rem;
+    transition: transform .2s, box-shadow .2s, filter .2s;
 }
-.links a:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px #ff99ff;
+.link:hover {
+    transform: translateY(-2px) scale(1.04);
+    filter: brightness(1.15);
 }
 
-/* адаптив */
-@media (max-width: 768px) {
-    .card {
+.link__icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+.link--github  { background: #24292f; }
+.link--tg      { background: #229ED9; }
+.link--discord { background: #5865F2; }
+.link--nsfw    { background: linear-gradient(135deg, #e83e8c, #ff1a27); }
+.link--steam   { background: #171a21; }
+.link--mal     { background: #2E51A2; }
+
+.link:hover { box-shadow: 0 4px 16px rgba(0,0,0,.35); }
+
+/* ── Skills ── */
+.skills__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -.01em;
+}
+
+.skills__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: .92rem;
+}
+.skills__list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.skills__list a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: rgba(211, 37, 211, .5);
+    text-underline-offset: 3px;
+    transition: text-decoration-color .2s;
+}
+.skills__list a:hover { text-decoration-color: #d325d3; }
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    font-size: .75rem;
+    flex-shrink: 0;
+}
+.tag--ok   { background: rgba(34, 197, 94, .2); color: #4ade80; }
+.tag--no   { background: rgba(239, 68, 68, .2); color: #f87171; }
+.tag--herb { background: rgba(34, 197, 94, .15); color: #86efac; }
+.tag--love { background: rgba(236, 72, 153, .2); color: #f472b6; }
+
+code {
+    font-family: var(--mono);
+    font-size: .82em;
+    background: rgba(255,255,255,.08);
+    padding: 2px 7px;
+    border-radius: 5px;
+}
+
+/* ═══ BLOCK 2: TOOLS FOR VRCHAT ═══ */
+.tools__heading {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+.tools__icon { font-size: 1.4rem; }
+
+.tools__subtitle {
+    color: var(--text-dim);
+    font-size: .9rem;
+    margin-bottom: 24px;
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+}
+
+/* ── Project card ── */
+.project {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 24px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .08);
+    text-decoration: none;
+    color: var(--text);
+    transition: background .25s, border-color .25s, transform .25s, box-shadow .25s;
+}
+.project:hover {
+    background: rgba(255, 255, 255, .1);
+    border-color: rgba(211, 37, 211, .35);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(211, 37, 211, .15);
+}
+
+.project__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.project__icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.project__icon-wrap--media   { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+.project__icon-wrap--haptics { background: linear-gradient(135deg, #06b6d4, #8b5cf6); }
+
+.project__icon { width: 22px; height: 22px; color: #fff; }
+
+.project__meta { flex: 1; }
+
+.project__name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.project__badge {
+    display: inline-block;
+    font-size: .68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .1);
+    color: var(--text-dim);
+    margin-top: 2px;
+}
+
+.project__arrow {
+    width: 20px;
+    height: 20px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    transition: transform .25s, color .25s;
+}
+.project:hover .project__arrow {
+    color: #d325d3;
+    transform: translate(3px, -3px);
+}
+
+.project__desc {
+    font-size: .88rem;
+    line-height: 1.55;
+    color: rgba(240, 230, 246, .75);
+}
+
+.project__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.ptag {
+    font-size: .72rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: rgba(211, 37, 211, .12);
+    color: rgba(240, 200, 255, .85);
+    border: 1px solid rgba(211, 37, 211, .18);
+}
+
+/* ── Footer ── */
+.footer {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: .8rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeUp .6s ease-out .3s both;
+}
+
+.footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color .2s;
+}
+.footer__link:hover { color: var(--text); }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 700px) {
+    body { padding: 20px 12px 12px; }
+
+    .card { padding: 24px 20px; border-radius: 18px; }
+
+    .card--about {
         flex-direction: column;
         align-items: center;
-        padding: 20px;
-        border-radius: 20px;
-    }
-    .avatar {
-        max-width: 300px;
-        margin-right: 0;
-    }
-    h1 {
-        font-size: 1.6rem;
         text-align: center;
     }
-    .subtitle {
-        text-align: center;
-        font-size: 0.95rem;
+
+    .card__avatar { max-width: 220px; }
+
+    .card__name { font-size: 1.55rem; }
+
+    .links { justify-content: center; }
+
+    .link {
+        padding: 8px 14px;
+        font-size: .8rem;
     }
-    .links {
-        text-align: center;
-    }
-    .links a {
-        display: block;
-        margin: 7px 0;
-        width: 100%;
-        max-width: 450px;
-    }
-    .skills {
-        text-align: center;
-    }
-    .skills ul {
-        padding-left: 0;
-    }
+
+    .skills { text-align: left; }
+    .skills__list { padding-left: 0; }
+
+    .projects { grid-template-columns: 1fr; }
+
+    .tools__heading { font-size: 1.25rem; justify-content: center; }
+    .tools__subtitle { text-align: center; }
 }

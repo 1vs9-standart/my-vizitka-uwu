@@ -1,5 +1,25 @@
-#/bin/bash
-sudo docker stop 1vs9-dev-uwu
-sudo docker rm 1vs9-dev-uwu
-sudo docker build -t 1vs9-dev-uwu .
-sudo docker run -d --name 1vs9-dev-uwu --network host 1vs9-dev-uwu
+#!/bin/bash
+set -e
+
+NAME="1vs9-dev-uwu"
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+echo "=== Stopping old container ==="
+docker stop "$NAME" 2>/dev/null || true
+docker rm "$NAME" 2>/dev/null || true
+
+echo "=== Building image ==="
+docker build -t "$NAME" "$DIR"
+
+echo "=== Starting container ==="
+docker run -d \
+    --name "$NAME" \
+    --network host \
+    --restart unless-stopped \
+    "$NAME"
+
+echo "=== Cleaning dangling images ==="
+docker image prune -f
+
+echo "=== Done! ==="
+docker ps --filter "name=$NAME" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
