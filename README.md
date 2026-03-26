@@ -1,12 +1,6 @@
 # 1vs9.dev
 
-Personal vizitka / business card for VRChat.
-
-## Stack
-
-- **Flask** + Gunicorn
-- **Docker** (single container, `--network host`)
-- Static HTML/CSS, no JavaScript
+my furryeb vizitka
 
 ## Quick Start
 
@@ -45,4 +39,3 @@ Site runs on `http://localhost:5002`
 
 `up.sh` builds the image, starts the container with `--restart unless-stopped` (auto-start after reboot), and prunes old images.
 
-Requires Docker.
