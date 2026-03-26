@@ -1,6 +1,10 @@
 /* ── Reset ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
+html {
+    font-size: 105%;
+}
+
 /* ── Variables ── */
 :root {
     --accent: #d325d3;
@@ -34,9 +38,7 @@ body {
 }
 
 /*
- * Кастомный «курсор»: во встроенных WebView/VRChat cursor:url() часто не работает.
  * Обход: cursor:none + <img> за pointermove (как в CSS-Tricks / общая практика для CEF).
- * Дополнительно оставлен url() — на обычном десктопе часть движков всё ещё может его подхватить до скрытия.
  */
 html:not(.no-custom-cursor),
 html:not(.no-custom-cursor) body,

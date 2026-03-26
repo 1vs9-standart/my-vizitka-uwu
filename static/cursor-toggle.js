@@ -1,4 +1,5 @@
 (function () {
+    /* По умолчанию системный курсор. В localStorage '1' = пользователь включил узел. */
     var KEY = "vizitkaCustomCursor";
     var root = document.documentElement;
     var easter = document.getElementById("easter-cursor-toggle");
@@ -27,10 +28,13 @@
     }
 
     function setNoCustom(on) {
-        if (on) root.classList.add("no-custom-cursor");
-        else root.classList.remove("no-custom-cursor");
-        if (on) storageSet("0");
-        else storageSet(null);
+        if (on) {
+            root.classList.add("no-custom-cursor");
+            storageSet(null);
+        } else {
+            root.classList.remove("no-custom-cursor");
+            storageSet("1");
+        }
         if (follower) {
             if (on) {
                 follower.classList.remove("is-active");
@@ -63,8 +67,8 @@
         });
     }
 
-    if (storageGet() === "0") {
-        root.classList.add("no-custom-cursor");
+    if (storageGet() === "1") {
+        root.classList.remove("no-custom-cursor");
     }
 
     document.addEventListener("pointermove", onPointerMove, { passive: true });
@@ -75,5 +79,4 @@
             toggle(ev);
         });
     }
-
 })();
