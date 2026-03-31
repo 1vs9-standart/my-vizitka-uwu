@@ -1,4 +1,3 @@
-/* ── Reset ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
 html {
@@ -20,7 +19,6 @@ html {
     --mono: 'JetBrains Mono', monospace;
 }
 
-/* ── Body ── */
 body {
     font-family: var(--font);
     background: url('/static/furry_bg.png') no-repeat center center fixed;
@@ -79,7 +77,6 @@ html.no-custom-cursor .project {
     cursor: pointer !important;
 }
 
-/* ── Single centered column (cards + footer) ── */
 .layout {
     width: min(100%, 920px);
     max-width: 920px;
@@ -90,7 +87,6 @@ html.no-custom-cursor .project {
     flex-shrink: 0;
 }
 
-/* ── Page wrapper ── */
 .page-wrapper {
     display: flex;
     flex-direction: column;
@@ -98,7 +94,6 @@ html.no-custom-cursor .project {
     width: 100%;
 }
 
-/* ── Glass card ── */
 .card {
     background: var(--glass-bg);
     backdrop-filter: blur(3px) saturate(1.4);
@@ -161,7 +156,6 @@ html.no-custom-cursor .project {
     margin-bottom: 22px;
 }
 
-/* ── Links row ── */
 .links {
     display: flex;
     flex-wrap: wrap;
@@ -299,7 +293,6 @@ html.no-custom-cursor .project {
         0 8px 22px rgba(46, 81, 162, .5);
 }
 
-/* Just 69 — просто красная кнопка */
 .link--nsfw {
     background: linear-gradient(180deg, #f04a5a, #c41e2e);
     font-weight: 700;
@@ -339,7 +332,6 @@ html.no-custom-cursor .project {
         0 8px 22px rgba(232, 67, 147, .55);
 }
 
-/* ── Skills ── */
 .skills__title {
     font-size: 1.15rem;
     font-weight: 700;
@@ -414,7 +406,6 @@ code {
     gap: 18px;
 }
 
-/* ── Project card ── */
 .project {
     display: flex;
     flex-direction: column;
@@ -508,7 +499,6 @@ code {
     border: 1px solid rgba(211, 37, 211, .18);
 }
 
-/* ── Footer ── */
 .footer {
     margin-top: 20px;
     padding: 12px;
@@ -530,7 +520,6 @@ code {
 }
 .footer__link:hover { color: var(--text); }
 
-/* ═══ RESPONSIVE ═══ */
 @media (max-width: 700px) {
     body { padding: 20px 12px 12px; }
 
